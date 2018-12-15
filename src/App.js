@@ -39,7 +39,7 @@ class App extends Component {
 
   handleNewDrums() 
   ///
-  /// This function is to be called every time we get a new
+  /// This function is to be called every time we want a new
   /// drum pattern. It creates a new visualizer and loads the
   /// drum samples into it.
   ///
@@ -72,6 +72,8 @@ class App extends Component {
         <div hidden={this.state.loading}>
           <div className="Beat">
             <canvas id="vaecanvas"></canvas>
+            <br/>
+            <button className="control" onClick={this.handleNewDrums} data-toggle="button"><b>Shuffle Beat</b></button>
           </div>
         </div>
       </div>
