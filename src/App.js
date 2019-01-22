@@ -16,6 +16,7 @@ class App extends Component {
         super(props);
 
         // Bind methods to this class where necessary.
+        this.begin = this.begin.bind(this);
         this.handlePlay = this.handlePlay.bind(this);
         this.handleStop = this.handleStop.bind(this);
         this.componentInitialized = this.componentInitialized.bind(this);
@@ -25,7 +26,8 @@ class App extends Component {
         this.state = {
             playing: false,
             stopping: false,
-            loaded: false
+            loaded: false,
+            begun: false
         };
 
         // Create components.
@@ -33,13 +35,19 @@ class App extends Component {
         this.components = [React.createRef()];
     }
 
-    componentDidMount()
+    begin()
     ///
     /// Method to be called after component is in the DOM.
     ///
     {
-        // Initialize components and set callbacks...
-        this.components[0].current.initialize(this.componentInitialized, this.playbackComplete); // The drum machine will control the playback loop
+        this.setState({begun: true});
+        // Initialize components and set callbacks.
+        // Currently only one callback is called no matter how many components we play.
+        // because of the way magenta works. So we give all components playbackComplete callbacks.
+        for(var i = 0; i<this.components.length; ++i)
+        {
+            this.components[i].current.initialize(this.componentInitialized, this.playbackComplete);
+        }
     }
 
     componentInitialized()
@@ -133,7 +141,10 @@ class App extends Component {
     {
         return (
             <div className="App">
-                <div hidden={this.state.loaded}>
+                <div hidden={this.state.begun}>
+                    <button onClick={this.begin}>Begin</button>
+                </div>
+                <div hidden={this.state.loaded || !this.state.begun}>
                     <header className="App-header">
                         <img src={logo} className="App-logo" alt="logo" />
                         Loading...
