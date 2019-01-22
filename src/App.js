@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import MagentaDrumCanvas from './MagentaDrumCanvas.js';
+import MagentaTranscribeCanvas from './MagentaTranscribeCanvas.js';
 
 class App extends Component {
 ///
@@ -32,7 +33,7 @@ class App extends Component {
 
         // Create components.
         this.components_initialized = 0;
-        this.components = [React.createRef()];
+        this.components = [React.createRef(), React.createRef()];
     }
 
     begin()
@@ -155,7 +156,8 @@ class App extends Component {
                         <button className="transport_controls" onClick={this.handlePlay} disabled={this.state.playing} data-toggle="button"><b>Play Loop</b></button>
                         <button className="transport_controls" onClick={this.handleStop} disabled={!this.state.playing} data-toggle="button"><b>{this.state.stopping ? "Stopping..." : "Stop Loop"}</b></button>
                     </div>
-                    <MagentaDrumCanvas ref={this.components[0]} />
+                    <MagentaTranscribeCanvas ref={this.components[0]} />
+                    <MagentaDrumCanvas ref={this.components[1]} />
                 </div>
             </div>
         );
