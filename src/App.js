@@ -142,19 +142,56 @@ class App extends Component {
     {
         return (
             <div className="App">
-                <div hidden={this.state.begun}>
-                    <button onClick={this.begin}>Begin</button>
+                <div className="Blackout" hidden={this.state.loaded}>
                 </div>
-                <div hidden={this.state.loaded || !this.state.begun}>
-                    <header className="App-header">
-                        <img src={logo} className="App-logo" alt="logo" />
-                        Loading...
-                    </header>
+                <div className="WelcomeDialogBorder" hidden={this.state.loaded}>
+                    <div className="WelcomeDialogLayout">
+                        <div className="WelcomeDialogTitle">
+                            WiMIR 2018 <br/>FOUND SOUND CLOUD
+                        </div>
+                        <div className="WelcomeDialog" hidden={this.state.begun}>
+                            <div className={"WelcomeDialogInnerLayout " + (this.state.loaded || !this.state.begun ? "hidden" : " ")}>
+                                <div className="Filler"></div>
+                                <header className="App-header">
+                                    <img src={logo} className="App-logo" alt="logo" />
+                                    LOADING...
+                                </header>
+                                <div className="Filler"></div>
+                            </div>
+                            <div className={"WelcomeDialogInnerLayout " + (this.state.begun ? "hidden": " ")}>
+                                <p style={{display: 'inline'}}>This application was inspired by the WiMIR 2018 workshop group <em>"Building Collaborations Among Artists, Coders and Machine Learning".</em> It uses machine learning (ML) models to take sound from the real world and combine it with a beat.</p>
+                                <div className="Filler"  style={{minHeight: 2}}></div>
+                                <span className="SpecialText" style={{fontSize: 20}}>CONTROLS:</span>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td><i className="fas fa-play-circle"></i> Play the current loop continuously until stopped</td>
+                                            <td><i className="fas fa-stop-circle"></i> Stop playing at the end of the next loop</td>
+                                        </tr>
+                                        <tr>
+                                            <td><i className="far fa-circle"></i> <span className="SpecialText">RECORD</span> a 2-bar audio clip and transcribe it to MIDI</td>
+                                            <td><i className="fas fa-random"></i> <span className="SpecialText">SHUFFLE</span> the current drum beat using an ML model</td>
+                                        </tr>
+                                        <tr>
+                                            <td><i className="fas fa-volume-up"></i> <span className="SpecialText">METRONOME</span> mute/enable for timing during recording</td>
+                                            <td><i className="fas fa-volume-up"></i> <span className="SpecialText">RECORDING</span> mute/enable for recorded audio playback</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div className="Filler"></div>
+                            </div>
+                        </div>
+                        <button disabled={this.state.begun} className="Button" onClick={this.begin}>CLICK HERE TO BEGIN</button>
+                    </div>
                 </div>
-                <div hidden={!this.state.loaded}>
+                <div>
                     <div className="PlayControls">
-                        <button className="transport_controls" onClick={this.handlePlay} disabled={this.state.playing} data-toggle="button"><b>Play Loop</b></button>
-                        <button className="transport_controls" onClick={this.handleStop} disabled={!this.state.playing} data-toggle="button"><b>{this.state.stopping ? "Stopping..." : "Stop Loop"}</b></button>
+                        <button className="Button" onClick={this.handlePlay} disabled={this.state.playing} data-toggle="button">
+                            {this.state.playing ? <i className="far fa-play-circle"></i> : <i className="fas fa-play-circle"></i> }
+                        </button>
+                        <button className="Button" onClick={this.handleStop} disabled={!this.state.playing} data-toggle="button">
+                            {this.state.stopping ? <i className="far fa-stop-circle"></i> : <i className="fas fa-stop-circle"></i>}
+                        </button>
                     </div>
                     <MagentaTranscribeCanvas ref={this.components[0]} />
                     <MagentaDrumCanvas ref={this.components[1]} />

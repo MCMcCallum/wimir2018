@@ -118,10 +118,16 @@ class MagentaDrumCanvas extends Component
     ///
     {
         return (
-            <div className="Beat">
-                <canvas id="vaecanvas"></canvas>
+            <div className="Rhythm">
+                <div style={{position:'relative'}}>
+                    <div className="SectionBackground">
+                        RHYTHM
+                    </div>
+                    <canvas id="vaecanvas"></canvas>
+                    <br/>
+                </div>
                 <br/>
-                <button className="control" onClick={this.handleNewDrums} disabled={!this.state.enabled} data-toggle="button"><b>Shuffle Beat</b></button>
+                <button className="Button" onClick={this.handleNewDrums} disabled={!this.state.enabled} data-toggle="button"><i className="fas fa-random"></i> SHUFFLE</button>
             </div>
         );
     }

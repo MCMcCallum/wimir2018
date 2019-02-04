@@ -3,10 +3,10 @@ import * as mm from '@magenta/music';
 
 var DEFAULT_NOTE_CANVAS = {
     notes: [
-        {pitch: 30, startTime: 0.0, endTime: 0.5},
-        {pitch: 100, startTime: 3.5, endTime: 4.0},
+        {pitch: 40, startTime: 0.0, endTime: 0.5},
+        {pitch: 110, startTime: 3.5, endTime: 4.0},
     ],
-    totalTime: 8
+    totalTime: 4
 };
 var FOUND_SOUND_URL = 'audio/sirenshort.wav';
 var METRONOME_URL = 'audio/metronome.wav';
@@ -52,7 +52,7 @@ class MagentaTranscribeCanvas extends Component
         // Create audio transcriber.
         this.config_transcriber = {
             noteHeight: 6,
-            pixelsPerTimeStep: 20,  // like a note width
+            pixelsPerTimeStep: 160,  // like a note width
             noteSpacing: 1,
             noteRGB: '8, 41, 64',
             activeNoteRGB: '112, 201, 198',
@@ -265,15 +265,28 @@ class MagentaTranscribeCanvas extends Component
     ///
     {
         return (
-            <div className="FoundSound">
-                <canvas id="transcribecanvas"></canvas>
+            <div className="Melody">
+                <div style={{position:'relative'}}>
+                    <div className="SectionBackground">
+                        MELODY
+                    </div>
+                    <canvas id="transcribecanvas"></canvas>
+                    <br/>
+                </div>
+                <br/>
+                <button className="Button" onClick={this.handleRecord} disabled={this.state.recording || !this.state.enabled} data-toggle="button">
+                    {this.state.recording ? <i className="fas fa-circle"></i> : <i className="far fa-circle"></i>} RECORD
+                </button>
                 <br/>
                 <br/>
-                <button className="control" onClick={this.handleRecord} disabled={this.state.recording || !this.state.enabled} data-toggle="button"><b>{this.state.recording ? "Recording..." : "Record"}</b></button>
-                <br/>
-                <br/>
-                <button className="control" onClick={this.toggleMetronome} data-toggle="button"><b>{this.state.metronome_muted ? "Unmute Metronome" : "Mute Metronome"}</b></button>
-                <button className="control" onClick={this.toggleFoundSound} data-toggle="button"><b>{this.state.found_sound_muted ? "Unmute Found Sound" : "Mute Found Sound"}</b></button>
+                <div className="VolumeControls">
+                    <button className="Button" onClick={this.toggleMetronome} data-toggle="button">
+                        {this.state.metronome_muted ? <i className="fas fa-volume-mute"></i> : <i className="fas fa-volume-up"></i>} METRONOME
+                    </button>
+                    <button className="Button" onClick={this.toggleFoundSound} data-toggle="button">
+                        {this.state.found_sound_muted ? <i className="fas fa-volume-mute"></i> : <i className="fas fa-volume-up"></i>} RECORDING
+                    </button>
+                </div>
                 <br/>
             </div>
         );
