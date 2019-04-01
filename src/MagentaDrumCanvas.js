@@ -57,7 +57,7 @@ class MagentaDrumCanvas extends Component
     ///
     {
         // Create drum VAE
-        this.viz_vae = new mm.Visualizer(DEFAULT_NOTE_CANVAS, document.getElementById('vaecanvas'), this.config_beat);
+        this.viz_vae = new mm.PianoRollCanvasVisualizer(DEFAULT_NOTE_CANVAS, document.getElementById('vaecanvas'), this.config_beat);
         this.viz_player_vae = new mm.Player(false, {
             run: (note) => this.viz_vae.redraw(note),
             stop: () => { play_callback(); }
