@@ -22,6 +22,7 @@ class App extends Component {
         this.handleStop = this.handleStop.bind(this);
         this.componentInitialized = this.componentInitialized.bind(this);
         this.playbackComplete = this.playbackComplete.bind(this);
+        this.stopped = this.stopped.bind(this);
 
         // Initisalize state.
         this.state = {
@@ -71,7 +72,8 @@ class App extends Component {
     {
         if(this.state.stopping)
         {
-            this.stopped();
+            // Wait half a second before officially stopping, because it is possible a second callback will come back, and we do not want to start playing again.
+            setTimeout(this.stopped, 500);
         }
         else
         {
@@ -102,9 +104,8 @@ class App extends Component {
         this.setState({
             playing: true,
             stopping: false
-        });
+        }, this.playbackComplete); // <= Start playback after state has changed.
         this.enableComponents(false);
-        this.playbackComplete();
     }
 
     handleStop()
