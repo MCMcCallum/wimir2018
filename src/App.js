@@ -73,7 +73,7 @@ class App extends Component {
         if(this.state.stopping)
         {
             // Wait half a second before officially stopping, because it is possible a second callback will come back, and we do not want to start playing again.
-            setTimeout(this.stopped, 500);
+            setTimeout(this.stopped, 250);
         }
         else
         {
