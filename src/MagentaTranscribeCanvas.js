@@ -6,6 +6,12 @@ var DEFAULT_NOTE_CANVAS = {
         {pitch: 40, startTime: 0.0, endTime: 0.5},
         {pitch: 110, startTime: 3.5, endTime: 4.0},
     ],
+    totalQuantizedSteps: 32,
+    totalTime: 4
+};
+var EMPTY_NOTE_CANVAS = {
+    notes: [],
+    totalQuantizedSteps: 32,
     totalTime: 4
 };
 var FOUND_SOUND_URL = 'audio/sirenshort.wav';
@@ -29,6 +35,7 @@ class MagentaTranscribeCanvas extends Component
         this.toggleMetronome = this.toggleMetronome.bind(this);
         this.toggleFoundSound = this.toggleFoundSound.bind(this);
         this.analyzeBuffer = this.analyzeBuffer.bind(this);
+        this.setNotes = this.setNotes.bind(this);
 
         // Initialize state.
         this.state = {
@@ -102,6 +109,7 @@ class MagentaTranscribeCanvas extends Component
             run: (note) => this.viz_transcribe.redraw(note),
             stop: () => { play_callback(); }
         });
+        this.setNotes(EMPTY_NOTE_CANVAS);
         
         // Initialize model
         this.transcriber.initialize()
@@ -109,9 +117,6 @@ class MagentaTranscribeCanvas extends Component
             .then(decoded_audio => {this.found_sound = decoded_audio;})
             .then(() => this.loadRemoteAudio(METRONOME_URL))     // LOADING AUDIO COULD BE PARALELLIZED...
             .then(decoded_audio => {this.metronome_sound = decoded_audio;})
-            .then(() => fetch(FOUND_SOUND_URL))                 // LOADING AUDIO COULD BE PARALELLIZED AND FOUND SOUND REUSED HERE...
-            .then(res => res.blob())
-            .then(blob => this.analyzeBuffer(blob))
             .then(() => ready_callback());
     }
 
@@ -184,6 +189,20 @@ class MagentaTranscribeCanvas extends Component
         });
     }
 
+    setNotes(notes)
+    ///
+    /// Updates the notes in the canvas and playback to those input here
+    ///
+    /// @param notes:
+    ///     A NoteSequence object to configure the player and visualizer with
+    ///
+    {
+        this.viz_transcribe.clear();
+        this.trans_samples = notes;
+        this.viz_transcribe.noteSequence = notes;
+        this.viz_transcribe.redraw();
+    }
+
     analyzeBuffer(blob) 
     ///
     /// Analyze an audio buffer blob by transcribing the audio and updating the note
@@ -197,15 +216,7 @@ class MagentaTranscribeCanvas extends Component
     ///
     {
         return this.transcriber.transcribeFromAudioFile(blob, 4)
-            .then(notes => {
-                if (this.viz_transcribe.noteSequence === DEFAULT_NOTE_CANVAS) {
-                    notes.notes = []
-                }
-                this.viz_transcribe.clear();
-                this.trans_samples = notes;
-                this.viz_transcribe.noteSequence = notes;
-                this.viz_transcribe.redraw();
-            })
+            .then(notes => { console.log(notes); this.setNotes(notes); })
     }
 
     toggleFoundSound() 
