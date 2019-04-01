@@ -127,7 +127,7 @@ class MagentaDrumCanvas extends Component
                     <br/>
                 </div>
                 <br/>
-                <button className="Button" onClick={this.handleNewDrums} disabled={!this.state.enabled} data-toggle="button"><i className="fas fa-random"></i> SHUFFLE</button>
+                <button className="Button" onClick={this.handleNewDrums} disabled={!this.state.enabled} data-toggle="button"><i className="fas fa-random"></i> SAMPLE</button>
             </div>
         );
     }

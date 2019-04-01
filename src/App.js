@@ -171,7 +171,7 @@ class App extends Component {
                                         </tr>
                                         <tr>
                                             <td><i className="far fa-circle"></i> <span className="SpecialText">RECORD</span> a 2-bar audio clip and transcribe it to MIDI</td>
-                                            <td><i className="fas fa-random"></i> <span className="SpecialText">SHUFFLE</span> the current drum beat using an ML model</td>
+                                            <td><i className="fas fa-random"></i> <span className="SpecialText">SAMPLE</span> create new drum beat using an ML model</td>
                                         </tr>
                                         <tr>
                                             <td><i className="fas fa-volume-up"></i> <span className="SpecialText">METRONOME</span> mute/enable for timing during recording</td>
