@@ -97,18 +97,24 @@ class MagentaTranscribeCanvas extends Component
             });
 
         // Initialize visualizer and player
-        this.viz_transcribe = new mm.Visualizer(DEFAULT_NOTE_CANVAS, document.getElementById('transcribecanvas'), this.config_transcriber);
+        this.viz_transcribe = new mm.PianoRollCanvasVisualizer(DEFAULT_NOTE_CANVAS, document.getElementById('transcribecanvas'), this.config_transcriber);
         this.viz_player_transcribed = new mm.Player(false, {
             run: (note) => this.viz_transcribe.redraw(note),
             stop: () => { play_callback(); }
         });
         
         // Initialize model
+        // NOTE: We have to load and analyze the FOUND_SOUND_URL twice to prevent a bug where
+        // the original recording doesn't disappear unless you reload it before playing it.
+        // This is the best fix I can come up with now.
         this.transcriber.initialize()
             .then(() => this.loadRemoteAudio(FOUND_SOUND_URL))   // LOADING AUDIO COULD BE PARALELLIZED...
             .then(decoded_audio => {this.found_sound = decoded_audio;})
             .then(() => this.loadRemoteAudio(METRONOME_URL))     // LOADING AUDIO COULD BE PARALELLIZED...
             .then(decoded_audio => {this.metronome_sound = decoded_audio;})
+            .then(() => fetch(FOUND_SOUND_URL))                 // LOADING AUDIO COULD BE PARALELLIZED AND FOUND SOUND REUSED HERE...
+            .then(res => res.blob())
+            .then(blob => this.analyzeBuffer(blob))
             .then(() => fetch(FOUND_SOUND_URL))                 // LOADING AUDIO COULD BE PARALELLIZED AND FOUND SOUND REUSED HERE...
             .then(res => res.blob())
             .then(blob => this.analyzeBuffer(blob))
@@ -198,6 +204,7 @@ class MagentaTranscribeCanvas extends Component
     {
         return this.transcriber.transcribeFromAudioFile(blob, 4)
             .then(notes => {
+                this.viz_transcribe.clear();
                 this.trans_samples = notes;
                 this.viz_transcribe.noteSequence = notes;
                 this.viz_transcribe.redraw();
